@@ -458,7 +458,7 @@ tram,3528,3528
     return t
 
 
-def get_people_in(df):
+def get_people_in_cbd(df):
     polygon = Polygon([
         (-74.005088, 40.779100),
         (-74.034957, 40.680314),
@@ -480,7 +480,7 @@ def get_people_in(df):
             return row['numPassengers']
 
     f = df[(df['type'] == 'PathTraversal') & (df['mode'].isin(['car', 'bus', 'subway']))][
-        ['mode', 'numPassengers', 'startX', 'startY', 'endX', 'endY']].copy(deep=True)
+        ['mode', 'numPassengers', 'startX', 'startY', 'endX', 'endY']].copy()
 
     f['numPeople'] = f.apply(lambda row: num_people(row), axis=1)
     f = f[f['numPeople'] > 0]
@@ -495,7 +495,7 @@ def get_people_in(df):
 
     s['percentIn'] = s['numIn'] * 100 / s['numIn'].sum()
 
-    return s['percentIn']
+    return s
 
 
 def diff_people_in(current, base):

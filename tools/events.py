@@ -14,7 +14,16 @@ def load_events(events_path, chunk_filter, chunksize=100000):
         schema[col] = str
     # Assign correct type for specific columns
     schema["time"] = int
+    schema["numPassengers"] = pd.Int64Dtype()
+    schema["capacity"] = pd.Int64Dtype()
+    schema["seatingCapacity"] = pd.Int64Dtype()
     schema["length"] = float
+    schema["startX"] = float
+    schema["startY"] = float
+    schema["endX"] = float
+    schema["endY"] = float
+    schema["primaryFuelLevel"] = float
+    schema["secondaryFuelLevel"] = float
     schema['departureTime'] = pd.Int64Dtype()
     schema['arrivalTime'] = pd.Int64Dtype()
 
@@ -23,7 +32,8 @@ def load_events(events_path, chunk_filter, chunksize=100000):
     df['hour'] = (df['time'] / 3600).astype(int)
     print("events file url:", events_path)
     print("loading took %s seconds" % (time.time() - start_time))
-    return df
+    # only columns that contains values
+    return df[df.columns[~df.isnull().all()]]
 
 
 def load_events_from_s3_chunked(s3url, iteration, chunk_filter, chunksize=100000):
