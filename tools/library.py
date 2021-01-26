@@ -41,9 +41,7 @@ def get_realized_modes_as_str(full_path, data_file_name='referenceRealizedModeCh
     else:
         path = get_output_path_from_s3_url(full_path)
 
-    df = pd.read_csv(path,
-                     names=['bike', 'car', 'cav', 'drive_transit', 'bike_transit', 'ride_hail', 'ride_hail_pooled', 'ride_hail_transit',
-                            'walk', 'walk_transit'])
+    df = pd.read_csv(path)
     last_row = df.tail(1)
     car = float(last_row['car'])
     walk = float(last_row['walk'])
@@ -54,7 +52,7 @@ def get_realized_modes_as_str(full_path, data_file_name='referenceRealizedModeCh
     drive_transit = float(last_row['drive_transit'])
     bike_transit = float(last_row['bike_transit'])
     ride_hail_pooled = float(last_row['ride_hail_pooled'])
-    # car	walk	bike	ride_hail	ride_hail_transit	walk_transit	drive_transit	ride_hail_pooled
+    # car	walk	bike	ride_hail	ride_hail_transit	walk_transit	drive_transit bike_transit	ride_hail_pooled
     result = "%f,%f,%f,%f,%f,%f,%f,%f,%f" % (
         car, walk, bike, ride_hail, ride_hail_transit, walk_transit, drive_transit, bike_transit, ride_hail_pooled)
     return result
@@ -917,9 +915,9 @@ def parse_config(config_url, complain=True):
                    "activity_file_path", "intercept_file_path", "additional_trip_utility",
                    "ModuleProbability_1", "ModuleProbability_2", "ModuleProbability_3", "ModuleProbability_4",
                    "BUS-DEFAULT", "RAIL-DEFAULT", "SUBWAY-DEFAULT"]
-    intercept_keys = ["bike_intercept", "car_intercept", "drive_transit_intercept", "ride_hail_intercept",
-                      "ride_hail_pooled_intercept", "ride_hail_transit_intercept", "walk_intercept",
-                      "walk_transit_intercept", "transfer"]
+    intercept_keys = ["bike_intercept", "car_intercept", "drive_transit_intercept", "bike_transit_intercept",
+                      "ride_hail_intercept", "ride_hail_pooled_intercept", "ride_hail_transit_intercept",
+                      "walk_intercept", "walk_transit_intercept", "transfer"]
 
     config_map = {}
     default_value = ""
