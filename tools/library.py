@@ -42,7 +42,7 @@ def get_realized_modes_as_str(full_path, data_file_name='referenceRealizedModeCh
         path = get_output_path_from_s3_url(full_path)
 
     df = pd.read_csv(path,
-                     names=['bike', 'car', 'cav', 'drive_transit', 'ride_hail', 'ride_hail_pooled', 'ride_hail_transit',
+                     names=['bike', 'car', 'cav', 'drive_transit', 'bike_transit', 'ride_hail', 'ride_hail_pooled', 'ride_hail_transit',
                             'walk', 'walk_transit'])
     last_row = df.tail(1)
     car = float(last_row['car'])
@@ -52,10 +52,11 @@ def get_realized_modes_as_str(full_path, data_file_name='referenceRealizedModeCh
     ride_hail_transit = float(last_row['ride_hail_transit'])
     walk_transit = float(last_row['walk_transit'])
     drive_transit = float(last_row['drive_transit'])
+    bike_transit = float(last_row['bike_transit'])
     ride_hail_pooled = float(last_row['ride_hail_pooled'])
     # car	walk	bike	ride_hail	ride_hail_transit	walk_transit	drive_transit	ride_hail_pooled
-    result = "%f,%f,%f,%f,%f,%f,%f,%f" % (
-        car, walk, bike, ride_hail, ride_hail_transit, walk_transit, drive_transit, ride_hail_pooled)
+    result = "%f,%f,%f,%f,%f,%f,%f,%f,%f" % (
+        car, walk, bike, ride_hail, ride_hail_transit, walk_transit, drive_transit, bike_transit, ride_hail_pooled)
     return result
 
 
@@ -965,7 +966,7 @@ def parse_config(config_url, complain=True):
 
 
 def get_calibration_text_data(s3url, commit=""):
-    print("order: car | walk | bike | ride_hail | ride_hail_transit | walk_transit | drive_transit | ride_hail_pooled")
+    print("order: car | walk | bike | ride_hail | ride_hail_transit | walk_transit | drive_transit | bike_transit | ride_hail_pooled")
     print("")
 
     print('ordered realized mode choice:')
@@ -983,7 +984,8 @@ def get_calibration_text_data(s3url, commit=""):
 
     intercepts = ["car_intercept", "walk_intercept", "bike_intercept", "ride_hail_intercept",
                   "ride_hail_transit_intercept",
-                  "walk_transit_intercept", "drive_transit_intercept", "ride_hail_pooled_intercept", "transfer"]
+                  "walk_transit_intercept", "drive_transit_intercept", "bike_transit_intercept",
+                  "ride_hail_pooled_intercept", "transfer"]
     print('order of intercepts:', "\n\t\t ".join(intercepts))
     intercepts_sections = ', '.join(get_config_value(x) for x in intercepts)
     print(intercepts_sections)
